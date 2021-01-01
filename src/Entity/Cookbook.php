@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\ApiEntityInterface;
 use App\Repository\CookbookRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=CookbookRepository::class)
  */
-class Cookbook
+class Cookbook implements ApiEntityInterface
 {
     /**
      * @ORM\Id
@@ -97,5 +98,17 @@ class Cookbook
         }
 
         return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getApiFields(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'owner' => $this->getOwner()->getId(),
+        ];
     }
 }

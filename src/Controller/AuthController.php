@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Cookbook;
 use App\Entity\User;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -45,12 +46,21 @@ class AuthController extends ApiController {
         try {
             $em->persist($user);
             $em->flush();
-
-            return $this->respondWithSuccess(sprintf('User %s successfully created', $user->getUsername()));
         } catch (UniqueConstraintViolationException $e) {
             return $this->setStatusCode(400)
                 ->respondWithErrors(sprintf('A user with the e-mail address %s already exits', $user->getUsername()));
         }
+
+
+        // Create default cookbook
+        $cookbook = new Cookbook();
+        $cookbook->setOwner($user);
+        $cookbook->setTitle('My Cookbook');
+        $em->persist($cookbook);
+        $em->flush();
+
+
+        return $this->respondWithSuccess(sprintf('User %s successfully created', $user->getUsername()));
     }
 
     /**
