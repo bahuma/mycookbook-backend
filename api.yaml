@@ -1,0 +1,107 @@
+openapi: 3.0.1
+info:
+  title: MyCookbook API
+  description: API for the cookbook
+  version: 0.1.0
+servers:
+  - url: 'http://localhost:8000'
+    description: Local development
+security:
+  - {}
+  - bearerAuth: []
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: OK
+      security:
+        - {}
+  /auth/login:
+    get:
+      summary: test
+      responses:
+        200:
+          description: OK
+    post:
+      tags:
+        - Authentication
+      summary: Login and get a JWT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  description: The mail of the user
+                password:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                required:
+                  - token
+                properties:
+                  token:
+                    type: string
+                    example: eyJ0eXAiOiJKV1QiLCJhbGc.eyJpYXQeyJ0eXAiOi.JKV1QiLCJhbGciOjzU
+                    description: |
+                      A [JSON Web Token](https://jwt.io) (JWT)
+
+                      The payload of the token contains the roles and the email address of the user.
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                required:
+                  - code
+                properties:
+                  code:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Invalid credentials
+      security:
+        - {}
+
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid.
+      content:
+        application/json:
+          schema:
+            properties:
+              code:
+                type: integer
+                example: 401
+              message:
+                type: string
+                example: Invalid JWT token
