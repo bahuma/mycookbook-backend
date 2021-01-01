@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -33,6 +35,16 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Cookbook::class, mappedBy="owner")
+     */
+    private $cookbooks;
+
+    public function __construct()
+    {
+        $this->cookbooks = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -110,5 +122,35 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|Cookbook[]
+     */
+    public function getCookbooks(): Collection
+    {
+        return $this->cookbooks;
+    }
+
+    public function addCookbook(Cookbook $cookbook): self
+    {
+        if (!$this->cookbooks->contains($cookbook)) {
+            $this->cookbooks[] = $cookbook;
+            $cookbook->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCookbook(Cookbook $cookbook): self
+    {
+        if ($this->cookbooks->removeElement($cookbook)) {
+            // set the owning side to null (unless already changed)
+            if ($cookbook->getOwner() === $this) {
+                $cookbook->setOwner(null);
+            }
+        }
+
+        return $this;
     }
 }
