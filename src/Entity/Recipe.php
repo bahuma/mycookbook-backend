@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use App\ApiEntityInterface;
 use App\Repository\RecipeRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=RecipeRepository::class)
  */
-class Recipe
+class Recipe implements ApiEntityInterface
 {
     /**
      * @ORM\Id
@@ -72,5 +73,17 @@ class Recipe
         $this->cookbook = $cookbook;
 
         return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getApiFields(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'cookbook' => $this->getCookbook()->getId(),
+        ];
     }
 }
