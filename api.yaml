@@ -198,15 +198,30 @@ components:
         - id
         - title
         - cookbook
+        - schemaorg
       properties:
         id:
           type: integer
         title:
           type: string
-          example: Banana Break
+          example: Banana Bread
         cookbook:
           type: integer
           description: The id of the cookbook this recipe belongs to
+        image:
+          type: object
+          required:
+            - original
+            - thumbnail
+          properties:
+            original:
+              type: string
+              description: An url to the original unmodified image.
+              example: http://localhost:8000/media/recipes/771ca36d-58eb-4f0c-8387-6b12c3055ef0.png
+            thumbnail:
+              type: string
+              description: A smaller cropped version of the image in 4:3 aspect ratio.
+              example: http://localhost:8000/media/cache/resolve/recipe_thumbnail/media/recipes/771ca36d-58eb-4f0c-8387-6b12c3055ef0.png
         schemaorg:
           type: object
           description: Schema.org representation of type [Recipe](https://schema.org/Recipe)

@@ -34,6 +34,26 @@ class Recipe implements ApiEntityInterface
      */
     private $cookbook;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getApiFields(): array
+    {
+
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'cookbook' => $this->getCookbook()->getId(),
+            'schemaorg' => $this->getSchemaorg(),
+            'image' => $this->getImage(),
+        ];
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,15 +95,15 @@ class Recipe implements ApiEntityInterface
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getApiFields(): array
+    public function getImage(): ?string
     {
-        return [
-            'id' => $this->getId(),
-            'title' => $this->getTitle(),
-            'cookbook' => $this->getCookbook()->getId(),
-        ];
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
     }
 }

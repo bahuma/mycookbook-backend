@@ -1,3 +1,4 @@
+/public/media/recipes
 .idea
 
 ###> symfony/framework-bundle ###
@@ -13,3 +14,7 @@
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
+
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###
