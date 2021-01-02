@@ -14,6 +14,7 @@ paths:
     post:
       tags:
         - Authentication
+      operationId: register
       summary: Register a new user
       requestBody:
         required: true
@@ -35,6 +36,7 @@ paths:
     post:
       tags:
         - Authentication
+      operationId: login
       summary: Login and get a JWT
       requestBody:
         required: true
@@ -89,6 +91,7 @@ paths:
     get:
       tags:
         - Cookbooks
+      operationId: cookbooks_list
       summary: List own cookbooks
       responses:
         200:
@@ -106,6 +109,7 @@ paths:
     get:
       tags:
         - Recipes
+      operationId: recipes_list
       summary: List recipes of a cookbook
       parameters:
         - name: cookbook
@@ -128,6 +132,7 @@ paths:
     post:
       tags:
         - Recipes
+      operationId: recipes_import
       summary: Import a recipe from a website
       description: Extracts json+ld information from an url and stores it in the database
       parameters:
