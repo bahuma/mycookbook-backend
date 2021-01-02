@@ -64,14 +64,13 @@ class RecipeController extends ApiController {
         try {
             $recipeJson = $extractor->downloadRecipe($request->get('url'));
         } catch (Exception $e) {
-            return $this->respondWithErrors('The recipe could not be extracted');
+            return $this->setStatusCode(422)->respondWithErrors('The recipe could not be extracted');
         }
-
 
         try {
             $recipeJson = $extractor->checkRecipe($recipeJson);
         } catch (Exception $e) {
-            return $this->respondWithErrors('The recipe could not be parsed');
+            return $this->setStatusCode(422)->respondWithErrors('The recipe could not be parsed');
         }
 
 

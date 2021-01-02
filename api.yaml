@@ -30,11 +30,6 @@ paths:
       security:
         - {}
   /auth/login:
-    get:
-      summary: test
-      responses:
-        200:
-          description: OK
     post:
       tags:
         - Authentication
@@ -84,9 +79,120 @@ paths:
                     example: Invalid credentials
       security:
         - {}
+  /api/cookbooks:
+    get:
+      tags:
+        - Cookbooks
+      summary: List own cookbooks
+      responses:
+        200:
+          description: List of cookbooks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cookbook"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /api/cookbooks/{cookbook}/recipes:
+    get:
+      tags:
+        - Recipes
+      summary: List recipes of a cookbook
+      parameters:
+        - name: cookbook
+          in: path
+          description: Id of the cookbook
+          schema:
+            type: integer
+      responses:
+        200:
+          description: List of recipes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Recipe"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+        - Recipes
+      summary: Import a recipe from a website
+      description: Extracts json+ld information from an url and stores it in the database
+      parameters:
+        - name: cookbook
+          in: path
+          description: Id of the cookbook
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                url:
+                  type: string
+                  description: The url to extract the recipe from
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+        422:
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  errors:
+                    type: string
+                    example: The recipe could not be extracted
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
 
 
 components:
+  schemas:
+    Cookbook:
+      required:
+        - id
+        - title
+        - owner
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+          example: My Cookbook
+        owner:
+          type: integer
+          description: User ID of the owner of this cookbook
+    Recipe:
+      required:
+        - id
+        - title
+        - cookbook
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+          example: Banana Break
+        cookbook:
+          type: integer
+          description: The id of the cookbook this recipe belongs to
+        schemaorg:
+          type: object
+          description: Schema.org representation of type [Recipe](https://schema.org/Recipe)
   securitySchemes:
     bearerAuth:
       type: http
