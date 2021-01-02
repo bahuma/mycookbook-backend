@@ -99,6 +99,7 @@ class RecipeController extends ApiController {
         $recipe->setCookbook($cookbook);
         $recipe->setSchemaorg($recipeJson);
         $recipe->setTitle($recipeJson['name']);
+        $recipe->setSource($url);
 
         // Download image
         if (isset($recipeJson['image']) && $recipeJson['image']) {

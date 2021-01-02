@@ -25,8 +25,10 @@ paths:
               properties:
                 email:
                   type: string
+                  format: email
                 password:
                   type: string
+                  format: password
       responses:
         '200':
           description: OK
@@ -50,9 +52,11 @@ paths:
               properties:
                 username:
                   type: string
+                  format: email
                   description: The mail of the user
                 password:
                   type: string
+                  format: password
       responses:
         '200':
           description: OK
@@ -208,6 +212,9 @@ components:
         cookbook:
           type: integer
           description: The id of the cookbook this recipe belongs to
+        source:
+          type: string
+          description: The url to the website where this recipe was imported from
         image:
           type: object
           required:

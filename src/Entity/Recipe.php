@@ -40,6 +40,11 @@ class Recipe implements ApiEntityInterface
     private $image;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $source;
+
+    /**
      * {@inheritDoc}
      */
     public function getApiFields(): array
@@ -49,8 +54,9 @@ class Recipe implements ApiEntityInterface
             'id' => $this->getId(),
             'title' => $this->getTitle(),
             'cookbook' => $this->getCookbook()->getId(),
-            'schemaorg' => $this->getSchemaorg(),
+            'source' => $this->getSource(),
             'image' => $this->getImage(),
+            'schemaorg' => $this->getSchemaorg(),
         ];
     }
 
@@ -103,6 +109,18 @@ class Recipe implements ApiEntityInterface
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getSource(): ?string
+    {
+        return $this->source;
+    }
+
+    public function setSource(?string $source): self
+    {
+        $this->source = $source;
 
         return $this;
     }
